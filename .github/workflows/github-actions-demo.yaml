@@ -1,22 +1,17 @@
 name: GitHub Actions Demo
-on:
-  schedule:
-    - cron: "* * * * *"
+on: [push]
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-
       - name: Check out repository code
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
+      - name: Écrire un fichier
+        run: echo "Hello depuis la pipeline !" > output.txt
 
-      - name: Run job.py
-        run: python job.py
+      - name: Upload de l'artefact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mon-fichier
+          path: output.txt
