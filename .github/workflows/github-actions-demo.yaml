@@ -7,11 +7,24 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v4
 
-      - name: Écrire un fichier
-        run: echo "Hello depuis la pipeline !" > output.txt
+      - name: Vérifier que le secret est accessible
+        env:
+          SECRET_API_TOKEN: ${{ secrets.SECRET_API_TOKEN }}
+        run: |
+          if [ -z "$SECRET_API_TOKEN" ]; then
+            echo "❌ Le secret est vide ou inaccessible"
+            exit 1
+          else
+            echo "✅ Le secret est bien accessible (longueur : ${#SECRET_API_TOKEN} caractères)"
+          fi
+          
 
-      - name: Upload de l'artefact
-        uses: actions/upload-artifact@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          name: mon-fichier
-          path: output.txt
+          python-version: "3.12"
+
+      - name: Run job.py
+        env:
+          SECRET_API_TOKEN: ${{ secrets.SECRET_API_TOKEN }}
+        run: python job.py
