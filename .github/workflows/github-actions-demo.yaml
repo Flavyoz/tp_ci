@@ -7,24 +7,10 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v4
 
-      - name: Vérifier que le secret est accessible
-        env:
-          SECRET_API_TOKEN: ${{ secrets.SECRET_API_TOKEN }}
-        run: |
-          if [ -z "$SECRET_API_TOKEN" ]; then
-            echo "❌ Le secret est vide ou inaccessible"
-            exit 1
-          else
-            echo "✅ Le secret est bien accessible (longueur : ${#SECRET_API_TOKEN} caractères)"
-          fi
-          
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.13"
 
-      - name: Run job.py
-        env:
-          SECRET_API_TOKEN: ${{ secrets.SECRET_API_TOKEN }}
-        run: python job.py
+      - name: Run tests
+        run: python test_unit_addition.py
